@@ -28,7 +28,13 @@ Then /the director of "(.*)" should be "(.*)"/ do |movie, dir|
   expect(Movie.find_by(title: movie).director == dir)
 end
 
-# Then /^I should see "'(.*)' has no director info"/ do |movie|
-#   step %{I should not see "#{movie}"}
+# Then /I should be on the home page/ do 
+#   page_name = "the home page"
+#   current_path = URI.parse(current_url)
+#   if current_path.respond_to? :should
+#     current_path.should == path_to(page_name)
+#   else
+#     assert_equal path_to(page_name), current_path
+#   end
 # end
 

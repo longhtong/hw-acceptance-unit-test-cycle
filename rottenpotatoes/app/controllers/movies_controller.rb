@@ -16,21 +16,15 @@ class MoviesController < ApplicationController
 
   def index
     sort = params[:sort] || session[:sort]
-    if params[:director] != nil
-      #redirect_to similarD_movies_path(:director => params[:director], :id => params[:id])
+    if params[:director] != nil && params[:director] != ""
       @movies = Movie.where(director: params[:director])
-      render "similarDirector.html.haml"
+      redirect_to similarD_movies_path(:director => params[:director], :title => params[:title])
       return
     end
-    if params[:director] == nil && params[:title] != nil
-      @title = params[:title]
-     render "nodirector.html.haml"
-      return
-      
- #     redirect_to movies_path
-#       return
-    end
-    #@message = "ahhhhhhhhhhh"
+    if (params[:director] == nil || params[:director] == "")&& params[:title] != nil
+     flash[:notice] = "'#{params[:title]}' has no director info"
+      @message = "'#{params[:title]}' has no director info"
+   end
     case sort
     when 'title'
       ordering,@title_header = {:title => :asc}, 'bg-warning hilite'
@@ -49,6 +43,7 @@ class MoviesController < ApplicationController
       session[:ratings] = @selected_ratings
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
+     
     @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
   end
 
@@ -83,14 +78,14 @@ class MoviesController < ApplicationController
   def samedirector
     
     
-    if params[:director] == nil
-      flash[:notice] = "'#{params[:title]}' has no director info."
-      redirect_to movies_path 
-      return
-      elsif params[:director] != nil
+#     if params[:director] == nil
+#       flash[:notice] = "'#{params[:title]}' has no director info"
+#       redirect_to movies_path 
+#       return
+#       elsif params[:director] != nil
       #flash[:notice] = "'#{params[:movie_id]}' #{director} has no director info."
        @movies = Movie.where(director: params[:director])
       render 'similarDirector.html.haml'
-    end
+#     end
   end
 end

@@ -28,7 +28,7 @@ module NavigationHelpers
       "/movies/#{id}"
     when /^the Similar Movies page for "(.*)"/
       director = Movie.find_by(title: $1).director
-      "/movies"
+      "/movies/directors"
     else
       begin
         page_name =~ /^the (.*) page$/

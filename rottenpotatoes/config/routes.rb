@@ -1,6 +1,6 @@
 Rottenpotatoes::Application.routes.draw do
   resources :movies do
-    get 'directors', to: 'movies#samedirector', :as => "similarD"
+    get 'directors', to: 'movies#samedirector', :as => "similarD", on: :collection
  end
       
   #get 'movies/', :to => 'movies#index'
