@@ -1,10 +1,14 @@
 class MoviesController < ApplicationController
 
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
   end
 
   def show
+#     if params[:director].is_a?(String)
+#       @movies = Movie.where(director: params[:director])
+#       render 'similarDirector.html.haml'
+#     end
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
@@ -12,6 +16,21 @@ class MoviesController < ApplicationController
 
   def index
     sort = params[:sort] || session[:sort]
+    if params[:director] != nil
+      #redirect_to similarD_movies_path(:director => params[:director], :id => params[:id])
+      @movies = Movie.where(director: params[:director])
+      render "similarDirector.html.haml"
+      return
+    end
+    if params[:director] == nil && params[:title] != nil
+      @title = params[:title]
+     render "nodirector.html.haml"
+      return
+      
+ #     redirect_to movies_path
+#       return
+    end
+    #@message = "ahhhhhhhhhhh"
     case sort
     when 'title'
       ordering,@title_header = {:title => :asc}, 'bg-warning hilite'
@@ -60,5 +79,18 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
-
+  
+  def samedirector
+    
+    
+    if params[:director] == nil
+      flash[:notice] = "'#{params[:title]}' has no director info."
+      redirect_to movies_path 
+      return
+      elsif params[:director] != nil
+      #flash[:notice] = "'#{params[:movie_id]}' #{director} has no director info."
+       @movies = Movie.where(director: params[:director])
+      render 'similarDirector.html.haml'
+    end
+  end
 end
