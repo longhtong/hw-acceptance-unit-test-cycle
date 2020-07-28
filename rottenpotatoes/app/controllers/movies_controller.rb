@@ -5,10 +5,7 @@ class MoviesController < ApplicationController
   end
 
   def show
-#     if params[:director].is_a?(String)
-#       @movies = Movie.where(director: params[:director])
-#       render 'similarDirector.html.haml'
-#     end
+
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
@@ -23,7 +20,7 @@ class MoviesController < ApplicationController
     end
     if (params[:director] == nil || params[:director] == "")&& params[:title] != nil
      flash[:notice] = "'#{params[:title]}' has no director info"
-      @message = "'#{params[:title]}' has no director info"
+      
    end
     case sort
     when 'title'
@@ -76,16 +73,7 @@ class MoviesController < ApplicationController
   end
   
   def samedirector
-    
-    
-#     if params[:director] == nil
-#       flash[:notice] = "'#{params[:title]}' has no director info"
-#       redirect_to movies_path 
-#       return
-#       elsif params[:director] != nil
-      #flash[:notice] = "'#{params[:movie_id]}' #{director} has no director info."
        @movies = Movie.where(director: params[:director])
       render 'similarDirector.html.haml'
-#     end
   end
 end
